@@ -13,15 +13,17 @@ public class UserTest {
 
     static User user;
     static User userWithoutField;
-    //private static int courierId;
+    static String accessToken;
 
-   // @After
-    //public void deleteUser() {
-      //  if (email != null && !email.isEmpty()) {
-        //    ValidatableResponse response = courierPath.deleteCourier(courierId);
-          //  courierIsLogged.deletedSuccesfully(response);
-        //}
-    //}
+
+    @After
+    public void deleteUser() {
+        if (accessToken != null && !accessToken.isEmpty()) {
+            ValidatableResponse response = userPath.deleteUser(accessToken);
+            userResponse.deletedSuccesfully(response);
+        }
+    }
+
 
     @DisplayName("Unique User is creating")
     @Test

@@ -6,14 +6,18 @@ import java.net.HttpURLConnection;
 import static org.junit.Assert.*;
 public class UserResponse {
     @Step("Check user can login as an existing")
-    public int loggedInSuccessfully(ValidatableResponse loginResponse) {
-        int id = loginResponse
+    public String loggedInSuccessfully(ValidatableResponse loginResponse) {
+        boolean success = loginResponse
                 .assertThat()
                 .statusCode(HttpURLConnection.HTTP_OK)
                 .extract()
-                .path("id")
-                ;
-        return id;
+                .path("success");
+        assertTrue(success);
+
+        String accessToken = loginResponse.extract().path("accessToken");
+        assertNotNull(accessToken);
+
+        return accessToken;
     }
 
     @Step("Check creating unique user")
@@ -66,5 +70,11 @@ public class UserResponse {
                     .path("message");
             assertEquals("email or password are incorrect", errorMessage);
         }
+
+    @Step("User is deleted")
+    public void deletedSuccesfully(ValidatableResponse response) {
+        response.assertThat()
+                .statusCode(HttpURLConnection.HTTP_ACCEPTED);
+    }
 
     }
