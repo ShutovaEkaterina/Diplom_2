@@ -1,19 +1,26 @@
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import userpackage.User;
 import userpackage.UserCreds;
 import userpackage.UserPath;
 import userpackage.UserResponse;
 
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class UserLoginTest {
     private final UserPath userPath = new UserPath();
     private final UserResponse userResponse = new UserResponse();
     static String accessToken;
+
+    @Before
+    public void setUp() {
+        // Создание нового пользователя перед каждым тестом
+        UserTest userTest = new UserTest();
+        userTest.testUser();
+    }
 
     @After
     public void deleteUser() {
@@ -26,9 +33,6 @@ public class UserLoginTest {
     @DisplayName("Existing user can login")
     @Test
     public void userLoginSuccess() {
-        UserTest userTest = new UserTest();
-        userTest.testUser();
-
         // Попытка логина созданного пользователя
         UserCreds creds = UserCreds.from(UserTest.user);
         ValidatableResponse loginResponse = userPath.loginUser(creds);
@@ -39,5 +43,14 @@ public class UserLoginTest {
         accessToken = token;
     }
 
-
+    @DisplayName("User login with incorrect email and password")
+    @Test
+    public void userLoginWithIncorrectEmailPassword() {
+        // Предполагается, что UserTest.user уже инициализирован в @Before методе
+        UserCreds creds = UserCreds.from(UserTest.user);
+        creds.setEmail("incorrect@example.com");
+        creds.setPassword("incorrectPassword");
+        ValidatableResponse loginResponseUnauthorized = userPath.loginIncorrectEmailPassword(creds);
+        userResponse.loginWithIncorrectData(loginResponseUnauthorized);
+    }
 }

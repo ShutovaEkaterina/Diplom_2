@@ -64,4 +64,44 @@ public class UserPath extends BasicStaff {
                 .delete(USER_PATH + "/user")
                 .then().log().all();
     }
+
+    @Step("Auth user is changing name")
+    public ValidatableResponse changingName(String accessToken, String name) {
+        Map<String, String> updatedUserData = Map.of("name", name);
+        return spec()
+                .header("Authorization", accessToken)
+                .body(updatedUserData)
+                .when()
+                .patch(USER_PATH + "/user")
+                .then().log().all();
+    }
+    @Step("Auth user is changing email")
+    public ValidatableResponse changingEmail(String accessToken, String email) {
+        Map<String, String> updatedUserData = Map.of("email", email);
+        return spec()
+                .header("Authorization", accessToken)
+                .body(updatedUserData)
+                .when()
+                .patch(USER_PATH + "/user")
+                .then().log().all();
+    }
+    @Step("Auth user is changing password")
+    public ValidatableResponse changingPassword(String accessToken, String password) {
+        Map<String, String> updatedUserData = Map.of("password", password);
+        return spec()
+                .header("Authorization", accessToken)
+                .body(updatedUserData)
+                .when()
+                .patch(USER_PATH + "/user")
+                .then().log().all();
+    }
+    @Step("Not auth user is changing name")
+    public ValidatableResponse changingNameNotAuth(String name) {
+        Map<String, String> updatedUserData = Map.of("name", name);
+        return spec()
+                .body(updatedUserData)
+                .when()
+                .patch(USER_PATH + "/user")
+                .then().log().all();
+    }
 }

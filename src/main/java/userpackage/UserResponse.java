@@ -3,6 +3,10 @@ package userpackage;
 import io.qameta.allure.Step;
 import io.restassured.response.ValidatableResponse;
 import java.net.HttpURLConnection;
+
+import static java.util.function.Predicate.not;
+import static org.hamcrest.Matchers.emptyOrNullString;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.*;
 public class UserResponse {
     @Step("Check user can login as an existing")
@@ -71,10 +75,48 @@ public class UserResponse {
             assertEquals("email or password are incorrect", errorMessage);
         }
 
+    @Step("Check authorized user can change name")
+    public void authUserIsChangingName(ValidatableResponse changingResponseName, String newName) {
+        changingResponseName
+                .assertThat()
+                .statusCode(HttpURLConnection.HTTP_OK) // Проверка, что статус ответа 200 OK
+                .body("success", equalTo(true)) // Проверка, что поле success равно true
+                .body("user.name", equalTo(newName));
+    }
+    @Step("Check authorized user can change email")
+    public void authUserIsChangingEmail(ValidatableResponse changingResponseEmail, String newEmail) {
+        changingResponseEmail
+                .assertThat()
+                .statusCode(HttpURLConnection.HTTP_OK) // Проверка, что статус ответа 200 OK
+                .body("success", equalTo(true)) // Проверка, что поле success равно true
+                .body("user.email", equalTo(newEmail));
+    }
+
+    @Step("Check authorized user can change password")
+    public void authUserIsChangingPassword(ValidatableResponse changingResponsePassword, String newPassword) {
+        changingResponsePassword
+                .assertThat()
+                .statusCode(HttpURLConnection.HTTP_OK) // Проверка, что статус ответа 200 OK
+                .body("success", equalTo(true)); // Проверка, что поле success равно true
+    }
+    @Step("Check not authorized user can change name")
+    public void notAuthUserIsChangingName(ValidatableResponse changingResponseName, String newName) {
+        changingResponseName
+                .assertThat()
+                .statusCode(HttpURLConnection.HTTP_UNAUTHORIZED) // Проверка, что статус ответа 401 Unauthorized
+                .body("success", equalTo(false)) // Проверка, что поле success равно false
+                .body("message", equalTo("You should be authorised")); // Проверка текста сообщения об ошибке
+    }
+
+
     @Step("User is deleted")
     public void deletedSuccesfully(ValidatableResponse response) {
         response.assertThat()
                 .statusCode(HttpURLConnection.HTTP_ACCEPTED);
+    }
+
+    public String extractToken(ValidatableResponse response) {
+        return response.extract().jsonPath().getString("accessToken");
     }
 
     }

@@ -1,42 +1,34 @@
-
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
-import org.junit.After;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import userpackage.User;
 import userpackage.UserPath;
 import userpackage.UserResponse;
 
 public class UserTest {
-    private final UserPath userPath = new UserPath();
-    private final UserResponse userResponse = new UserResponse();
+    private static final UserPath userPath = new UserPath();
+    private static final UserResponse userResponse = new UserResponse();
 
     static User user;
-    static User userWithoutField;
-    static String accessToken;
 
-
-    @After
-    public void deleteUser() {
-        if (accessToken != null && !accessToken.isEmpty()) {
-            ValidatableResponse response = userPath.deleteUser(accessToken);
-            userResponse.deletedSuccesfully(response);
-        }
-    }
-
-
-    @DisplayName("Unique User is creating")
-    @Test
-    public void testUser() {
+    @BeforeClass
+    public static void createUniqueUser() {
         user = User.random();
         ValidatableResponse createResponse = userPath.createUser(user);
         userResponse.createdSuccessfully(createResponse, user);
     }
 
+    @DisplayName("Unique User is creating")
+    @Test
+    public void testUserCreation() {
+        // Пользователь уже создан в @BeforeClass, этот тест проверяет, что создание прошло успешно
+        assertNotNull(user);
+    }
+
     @DisplayName("Existing user is creating")
     @Test
     public void testExistingUser() {
-        var user = User.random();
         ValidatableResponse createResponse = userPath.createUser(user);
         userResponse.createdSuccessfully(createResponse, user);
 
@@ -53,9 +45,8 @@ public class UserTest {
     @DisplayName("User without obligatory field is creating")
     @Test
     public void testUserObligatoryField() {
-        userWithoutField = new User(null, "secret123", "Smith");
+        User userWithoutField = new User(null, "secret123", "Smith");
         ValidatableResponse createResponseForbiddenField = userPath.createUserWithoutField(userWithoutField);
         userResponse.createdWithoutObligatoryField(createResponseForbiddenField);
     }
-
 }
