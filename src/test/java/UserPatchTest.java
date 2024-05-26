@@ -101,5 +101,15 @@ public class UserPatchTest {
         // Проверка ответа на запрос изменения имени
         userResponse.notAuthUserIsChangingName(changingResponseName, newName);
     }
+    @Test
+    @DisplayName("Not authorized user can change email")
+    public void notAuthUserChangeEmail() {
+        // Изменение имени пользователя
+        String newEmail = "newuseremail@example.com";
+        ValidatableResponse changingResponseEmail = userPath.changingEmailNotAuth(newEmail);
+
+        // Проверка ответа на запрос изменения имени
+        userResponse.notAuthUserIsChangingEmail(changingResponseEmail, newEmail);
+    }
 
 }

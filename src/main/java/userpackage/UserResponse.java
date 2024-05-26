@@ -108,6 +108,15 @@ public class UserResponse {
                 .body("message", equalTo("You should be authorised")); // Проверка текста сообщения об ошибке
     }
 
+    @Step("Check not authorized user can change email")
+    public void notAuthUserIsChangingEmail(ValidatableResponse changingResponseEmail, String newEmail) {
+        changingResponseEmail
+                .assertThat()
+                .statusCode(HttpURLConnection.HTTP_UNAUTHORIZED) // Проверка, что статус ответа 401 Unauthorized
+                .body("success", equalTo(false)) // Проверка, что поле success равно false
+                .body("message", equalTo("You should be authorised")); // Проверка текста сообщения об ошибке
+    }
+
 
     @Step("User is deleted")
     public void deletedSuccesfully(ValidatableResponse response) {
