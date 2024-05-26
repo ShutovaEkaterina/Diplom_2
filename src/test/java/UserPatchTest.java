@@ -3,6 +3,7 @@ import io.restassured.response.ValidatableResponse;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import userpackage.User;
 import userpackage.UserCreds;
 import userpackage.UserPath;
 import userpackage.UserResponse;
@@ -17,8 +18,12 @@ public class UserPatchTest {
     @Before
     public void setUp() {
         // Создание нового пользователя перед каждым тестом
-        UserTest userTest = new UserTest();
-        userTest.testUser();
+        User user = User.random();
+        ValidatableResponse createResponse = userPath.createUser(user);
+
+        // Получение токена доступа из ответа на создание пользователя
+        accessToken = userResponse.loggedInSuccessfully(createResponse);
+        assertNotNull("Access token should not be null", accessToken);
     }
 
     @After
@@ -33,13 +38,13 @@ public class UserPatchTest {
     @Test
     public void authUserChangeName() {
         // Попытка логина созданного пользователя
-        UserCreds creds = UserCreds.from(UserTest.user);
-        ValidatableResponse loginResponse = userPath.loginUser(creds);
+       // UserCreds creds = UserCreds.from(UserTest.user);
+        //ValidatableResponse loginResponse = userPath.loginUser(creds);
 
         // Проверка успешного логина и получение accessToken
-        String token = userResponse.loggedInSuccessfully(loginResponse);
-        assertNotNull("Access token should not be null", token);
-        accessToken = token;
+       // String token = userResponse.loggedInSuccessfully(loginResponse);
+       // assertNotNull("Access token should not be null", token);
+       // accessToken = token;
 
         // Изменение имени пользователя
         String newName = "newUserName";
@@ -52,13 +57,13 @@ public class UserPatchTest {
     @Test
     public void authUserChangeEmail() {
         // Попытка логина созданного пользователя
-        UserCreds creds = UserCreds.from(UserTest.user);
-        ValidatableResponse loginResponse = userPath.loginUser(creds);
+       // UserCreds creds = UserCreds.from(UserTest.user);
+       // ValidatableResponse loginResponse = userPath.loginUser(creds);
 
         // Проверка успешного логина и получение accessToken
-        String token = userResponse.loggedInSuccessfully(loginResponse);
-        assertNotNull("Access token should not be null", token);
-        accessToken = token;
+       // String token = userResponse.loggedInSuccessfully(loginResponse);
+       // assertNotNull("Access token should not be null", token);
+       // accessToken = token;
 
         // Изменение имени пользователя
         String newEmail = "newuseremail@example.com";
@@ -71,13 +76,13 @@ public class UserPatchTest {
     @Test
     public void authUserChangePassword() {
         // Попытка логина созданного пользователя
-        UserCreds creds = UserCreds.from(UserTest.user);
-        ValidatableResponse loginResponse = userPath.loginUser(creds);
+       // UserCreds creds = UserCreds.from(UserTest.user);
+       // ValidatableResponse loginResponse = userPath.loginUser(creds);
 
         // Проверка успешного логина и получение accessToken
-        String token = userResponse.loggedInSuccessfully(loginResponse);
-        assertNotNull("Access token should not be null", token);
-        accessToken = token;
+       // String token = userResponse.loggedInSuccessfully(loginResponse);
+        //assertNotNull("Access token should not be null", token);
+        //accessToken = token;
 
         // Изменение имени пользователя
         String newPassword = "n121212121";
