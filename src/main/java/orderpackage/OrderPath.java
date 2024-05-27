@@ -27,4 +27,21 @@ public class OrderPath extends BasicStaff {
                 .post(ORDER_PATH)
                 .then().log().all();
     }
+    @Step("Create order with auth and without ingredient")
+    public ValidatableResponse createOrderAuthWithoutIngredient(String accessToken, Order order) {
+        return spec()
+                .header("Authorization", accessToken)
+                .body(order)
+                .when()
+                .post(ORDER_PATH)
+                .then().log().all();
+    }
+    @Step("Create order not auth and with ingredient")
+    public ValidatableResponse createOrderNotAuthWithIngredient(Order order) {
+        return spec()
+                .body(order)
+                .when()
+                .post(ORDER_PATH)
+                .then().log().all();
+    }
 }

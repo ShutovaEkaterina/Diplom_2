@@ -12,6 +12,7 @@ import userpackage.User;
 import userpackage.UserPath;
 import userpackage.UserResponse;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class OrderTest {
         }
     }
 
-    // Тест упадет, потому что какой-то из ингредиентов некорректный
+    // Тест упадет, потому что, согласно документации, должен возврашаться статус код 500, а верунлся 400
     @Test
     @DisplayName("Creating order with auth and incorrect ingredient")
     public void creatingOrderWithAuthIncorrectIngredient() {
@@ -77,5 +78,32 @@ public class OrderTest {
 
         // Проверка ответа на запрос создания заказа
         orderResponse.orderCreatingWithAuthCorrectIngredient(orderResponseAuthCorIngredient);
+    }
+    @Test
+    @DisplayName("Creating order with auth and without ingredient")
+    public void creatingOrderWithAuthWithoutIngredient() {
+        // Создание и инициализация объекта Order с пустым списком ингредиентов
+        List<String> ingredients = new ArrayList<>(); // Создание пустого списка
+        Order order = new Order(ingredients); // Передача пустого списка в конструктор Order
+
+        // Вызов метода createOrderAuth с передачей accessToken и объекта Order
+        ValidatableResponse orderResponseAuthWithoutIngredient = orderPath.createOrderAuthWithoutIngredient(accessToken, order);
+
+        // Проверка ответа на запрос создания заказа
+        orderResponse.orderCreatingWithAuthWithoutIngredient(orderResponseAuthWithoutIngredient);
+    }
+    //тест упадет, хоть это не сказано в документации, но без авторизации при создании заказа по идее должна возвращаться ошибка
+    @Test
+    @DisplayName("Creating order not auth and with ingredient")
+    public void creatingOrderNotAuthWithIngredient() {
+        // Создание и инициализация объекта Order с пустым списком ингредиентов
+        List<String> ingredients = Arrays.asList(hash_ingredient_3, hash_ingredient_4);
+        Order order = new Order(ingredients);
+
+        // Вызов метода createOrderAuth с передачей accessToken и объекта Order
+        ValidatableResponse orderResponseNotAuthWithIngredient = orderPath.createOrderNotAuthWithIngredient(order);
+
+        // Проверка ответа на запрос создания заказа
+        orderResponse.orderCreatingNotAuthWithIngredient(orderResponseNotAuthWithIngredient);
     }
 }
