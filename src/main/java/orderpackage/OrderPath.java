@@ -44,4 +44,19 @@ public class OrderPath extends BasicStaff {
                 .post(ORDER_PATH)
                 .then().log().all();
     }
+    @Step("Get orders auth user")
+    public ValidatableResponse getOrdersAuthUser(String accessToken) {
+        return spec()
+                .header("Authorization", accessToken)
+                .when()
+                .get(ORDER_PATH)
+                .then().log().all();
+    }
+    @Step("Get orders not auth user")
+    public ValidatableResponse getOrdersNotAuthUser() {
+        return spec()
+                .when()
+                .get(ORDER_PATH)
+                .then().log().all();
+    }
 }

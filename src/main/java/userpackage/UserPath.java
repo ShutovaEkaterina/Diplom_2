@@ -1,12 +1,9 @@
 package userpackage;
-
 import basicpackage.BasicStaff;
 import io.qameta.allure.Step;
 import io.restassured.response.ValidatableResponse;
-
 import java.util.Map;
 
-import static io.restassured.RestAssured.when;
 
 public class UserPath extends BasicStaff {
     private static final String USER_PATH = "/auth";
@@ -56,7 +53,7 @@ public class UserPath extends BasicStaff {
                 .then().log().all();
     }
 
-    @Step("User is deleted")
+    @Step("User is deleting")
     public ValidatableResponse deleteUser(String accessToken) {
         return spec()
                 .header("Authorization", accessToken)

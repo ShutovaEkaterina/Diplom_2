@@ -17,11 +17,9 @@ public class UserPatchTest {
 
     @Before
     public void setUp() {
-        // Создание нового пользователя перед каждым тестом
         User user = User.random();
         ValidatableResponse createResponse = userPath.createUser(user);
 
-        // Получение токена доступа из ответа на создание пользователя
         accessToken = userResponse.loggedInSuccessfully(createResponse);
         assertNotNull("Access token should not be null", accessToken);
     }
@@ -37,88 +35,55 @@ public class UserPatchTest {
     @DisplayName("Authorized user can change name")
     @Test
     public void authUserChangeName() {
-        // Попытка логина созданного пользователя
-       // UserCreds creds = UserCreds.from(UserTest.user);
-        //ValidatableResponse loginResponse = userPath.loginUser(creds);
 
-        // Проверка успешного логина и получение accessToken
-       // String token = userResponse.loggedInSuccessfully(loginResponse);
-       // assertNotNull("Access token should not be null", token);
-       // accessToken = token;
-
-        // Изменение имени пользователя
         String newName = "newUserName";
         ValidatableResponse changingResponseName = userPath.changingName(accessToken, newName);
 
-        // Проверка успешного изменения имени
         userResponse.authUserIsChangingName(changingResponseName, newName);
     }
     @DisplayName("Authorized user can change email")
     @Test
     public void authUserChangeEmail() {
-        // Попытка логина созданного пользователя
-       // UserCreds creds = UserCreds.from(UserTest.user);
-       // ValidatableResponse loginResponse = userPath.loginUser(creds);
 
-        // Проверка успешного логина и получение accessToken
-       // String token = userResponse.loggedInSuccessfully(loginResponse);
-       // assertNotNull("Access token should not be null", token);
-       // accessToken = token;
-
-        // Изменение имени пользователя
         String newEmail = "newuseremail@example.com";
         ValidatableResponse changingResponseEmail = userPath.changingEmail(accessToken, newEmail);
 
-        // Проверка успешного изменения имени
         userResponse.authUserIsChangingEmail(changingResponseEmail, newEmail);
     }
     @DisplayName("Authorized user can change password")
     @Test
     public void authUserChangePassword() {
-        // Попытка логина созданного пользователя
-       // UserCreds creds = UserCreds.from(UserTest.user);
-       // ValidatableResponse loginResponse = userPath.loginUser(creds);
 
-        // Проверка успешного логина и получение accessToken
-       // String token = userResponse.loggedInSuccessfully(loginResponse);
-        //assertNotNull("Access token should not be null", token);
-        //accessToken = token;
-
-        // Изменение имени пользователя
         String newPassword = "n121212121";
         ValidatableResponse changingResponsePassword = userPath.changingPassword(accessToken, newPassword);
 
-        // Проверка успешного изменения имени
         userResponse.authUserIsChangingPassword(changingResponsePassword, newPassword);
     }
     @Test
     @DisplayName("Not authorized user can change name")
     public void notAuthUserChangeName() {
-        // Изменение имени пользователя
+
         String newName = "newUserName";
         ValidatableResponse changingResponseName = userPath.changingNameNotAuth(newName);
 
-        // Проверка ответа на запрос изменения имени
         userResponse.notAuthUserIsChangingName(changingResponseName, newName);
     }
     @Test
     @DisplayName("Not authorized user can change email")
     public void notAuthUserChangeEmail() {
-        // Изменение имени пользователя
+
         String newEmail = "newuseremail@example.com";
         ValidatableResponse changingResponseEmail = userPath.changingEmailNotAuth(newEmail);
 
-        // Проверка ответа на запрос изменения имени
         userResponse.notAuthUserIsChangingEmail(changingResponseEmail, newEmail);
     }
     @Test
     @DisplayName("Not authorized user can change password")
     public void notAuthUserChangePassword() {
-        // Изменение имени пользователя
+
         String newPassword = "newpassword";
         ValidatableResponse changingResponsePassword = userPath.changingPasswordNotAuth(newPassword);
 
-        // Проверка ответа на запрос изменения имени
         userResponse.notAuthUserIsChangingPassword(changingResponsePassword, newPassword);
     }
 

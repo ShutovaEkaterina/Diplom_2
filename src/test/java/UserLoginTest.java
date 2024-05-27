@@ -17,7 +17,6 @@ public class UserLoginTest {
 
     @Before
     public void setUp() {
-        // Создание нового пользователя перед каждым тестом
         UserTest userTest = new UserTest();
         userTest.testUser();
     }
@@ -33,11 +32,9 @@ public class UserLoginTest {
     @DisplayName("Existing user can login")
     @Test
     public void userLoginSuccess() {
-        // Попытка логина созданного пользователя
         UserCreds creds = UserCreds.from(UserTest.user);
         ValidatableResponse loginResponse = userPath.loginUser(creds);
 
-        // Проверка успешного логина и получение accessToken
         String token = userResponse.loggedInSuccessfully(loginResponse);
         assertNotNull("Access token should not be null", token);
         accessToken = token;
@@ -46,7 +43,6 @@ public class UserLoginTest {
     @DisplayName("User login with incorrect email and password")
     @Test
     public void userLoginWithIncorrectEmailPassword() {
-        // Предполагается, что UserTest.user уже инициализирован в @Before методе
         UserCreds creds = UserCreds.from(UserTest.user);
         creds.setEmail("incorrect@example.com");
         creds.setPassword("incorrectPassword");
