@@ -113,4 +113,13 @@ public class UserPath extends BasicStaff {
                 .patch(USER_PATH + "/user")
                 .then().log().all();
     }
+    @Step("Not auth user is changing password")
+    public ValidatableResponse changingPasswordNotAuth(String password) {
+        Map<String, String> updatedUserData = Map.of("password", password);
+        return spec()
+                .body(updatedUserData)
+                .when()
+                .patch(USER_PATH + "/user")
+                .then().log().all();
+    }
 }
